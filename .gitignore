@@ -1,0 +1,6 @@
+/.dbdata
+/enabled_plugins
+/*.pyc
+*.pyc
+venv
+.idea

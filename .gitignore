@@ -2,5 +2,5 @@
 /enabled_plugins
 /*.pyc
 *.pyc
-venv
+/venv
 .idea

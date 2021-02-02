@@ -1,15 +1,15 @@
 import requests
-from requests.exceptions import ConnectionError
+from dataclasses import dataclass
 from flask import Flask, jsonify, abort
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import UniqueConstraint
-from dataclasses import dataclass
 
 from producer import publish
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@db/main'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://main:traincascade@db:5432/main'
+# app.config.from_object("main.config.Config")
 CORS(app)
 
 db = SQLAlchemy(app)
@@ -42,7 +42,7 @@ def index():
 
 @app.route('/api/products/<int:id>/like', methods=['POST'])
 def like(id):
-    req = requests.get('http://192.168.0.20:8020/api/user', timeout=5)
+    req = requests.get('http://172.168.0.20:8020/api/user', timeout=5)
     json = req.json()
 
     try:

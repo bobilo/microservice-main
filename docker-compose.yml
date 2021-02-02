@@ -10,6 +10,8 @@ services:
      - 8001:5000
    volumes:
      - .:/app
+   env_file:
+     - ./.env.dev
    depends_on:
      - db
 
@@ -22,14 +24,26 @@ services:
       - db
 
   db:
-    image: mysql:5.7.22
-    restart: always
-    environment:
-      MYSQL_DATABASE: main
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
-      MYSQL_ROOT_PASSWORD: root
+    image: postgres:12-alpine
     volumes:
-      - .dbdata:/var/lib/mysql
-    ports:
-      - 33067:3306
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=main
+      - POSTGRES_PASSWORD=traincascade
+      - POSTGRES_DB=main
+
+volumes:
+  postgres_data:
+
+#  db:
+#    image: mysql:5.7.22
+#    restart: always
+#    environment:
+#      MYSQL_DATABASE: main
+#      MYSQL_USER: root
+#      MYSQL_PASSWORD: root
+#      MYSQL_ROOT_PASSWORD: root
+#    volumes:
+#      - .dbdata:/var/lib/mysql
+#    ports:
+#      - 33067:3306

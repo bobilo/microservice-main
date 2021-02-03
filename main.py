@@ -1,7 +1,7 @@
 import requests
 from dataclasses import dataclass
 from flask import Flask, jsonify, abort
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import UniqueConstraint
 
@@ -28,11 +28,13 @@ class Product(db.Model):
 
 @dataclass
 class ProductUser(db.Model):
+    __tablename__ = 'product_user'
+    __table_args__ = (
+        db.UniqueConstraint('user_id', 'product_id', name='user_product_unique'),
+    )
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer)
     product_id = db.Column(db.Integer)
-
-    UniqueConstraint('user_id', 'product_id', name='user_product_unique')
 
 
 @app.route('/api/products')
@@ -41,6 +43,7 @@ def index():
 
 
 @app.route('/api/products/<int:id>/like', methods=['POST'])
+@cross_origin()
 def like(id):
     req = requests.get('http://172.168.0.20:8020/api/user', timeout=5)
     json = req.json()
